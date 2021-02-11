@@ -1,0 +1,47 @@
+﻿@page "/coins"
+@using CoinGeckoApi_Blazor.Services
+@using CoinGeckoApi_Blazor.Model
+@inject CoinsService CoinsService
+
+<h1>Coin details</h1>
+<p>
+    Coin id (e.g. venus, dynamite, rivermount):
+    <input @bind="coinId" />
+</p>
+@if (coin != null)
+{
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Last Updated</th>
+            <th>Price Change 24h GBP</th>
+            <th>Price Change 24h GBP %</th>
+            <th>Twitter followers</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@coin.id</td>
+            <td>@coin.last_updated</td>
+            <td>@coin.market_data.price_change_24h_in_currency.gbp</td>
+            <td>@coin.market_data.price_change_percentage_24h_in_currency.gbp</td>
+            <td>@coin.community_data.twitter_followers</td>
+        </tr>
+    </tbody>
+</table>
+}
+
+
+<button class="btn btn-primary" @onclick="GetCoinDetailsAsync">Get coin details</button>
+
+@code {
+    private string coinId = "dynamite";
+    private Coin coin;
+
+    private async Task GetCoinDetailsAsync()
+    {
+        coin = await CoinsService.GetCoinDetailsAsync(coinId);
+    }
+}
+
