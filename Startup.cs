@@ -1,23 +1,24 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using CoinGeckoApi_Blazor.Services;
+using System.Net.Http;
 
 namespace CoinGeckoApi_Blazor
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            Configuration = new ConfigurationBuilder()
+
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+            .AddEnvironmentVariables()
+            .Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -28,19 +29,18 @@ namespace CoinGeckoApi_Blazor
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddHttpClient<ExchangesService>(client =>
-            {
-                client.BaseAddress = new Uri("https://coingecko.p.rapidapi.com");
-                client.DefaultRequestHeaders.Add("x-rapidapi-key", "498575e1f1mshf64bc786951dff8p151f0ejsn1847f4ae8ae9");
-                client.DefaultRequestHeaders.Add("x-rapidapi-host", "coingecko.p.rapidapi.com");
-            });
 
-            services.AddHttpClient<CoinsService>(client =>
+            Console.WriteLine("x-rapidapi-baseurl set to" + Configuration["x-rapidapi-baseurl"]);
+            HttpClient httpClient = new HttpClient()
             {
-                client.BaseAddress = new Uri("https://coingecko.p.rapidapi.com");
-                client.DefaultRequestHeaders.Add("x-rapidapi-key", "498575e1f1mshf64bc786951dff8p151f0ejsn1847f4ae8ae9");
-                client.DefaultRequestHeaders.Add("x-rapidapi-host", "coingecko.p.rapidapi.com");
-            });
+                BaseAddress = new Uri(Configuration["x-rapidapi-baseurl"])
+            };
+            httpClient.DefaultRequestHeaders.Add("x-rapidapi-key", Configuration["x-rapidapi-key"]);
+            httpClient.DefaultRequestHeaders.Add("x-rapidapi-host", Configuration["x-rapidapi-host"]);
+            services.AddSingleton(httpClient);
+            services.AddScoped<ExchangesService>();
+            services.AddScoped<CoinsService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
