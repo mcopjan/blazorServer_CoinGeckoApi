@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
@@ -14,9 +15,11 @@ namespace CoinGeckoApi_Blazor
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+
+                    var port = Environment.GetEnvironmentVariable("PORT") ?? "5050";
                     webBuilder.UseStaticWebAssets();
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://*:5050");
+                    webBuilder.UseUrls($"http://*:{port}");
                 });
     }
 }
