@@ -1,0 +1,11 @@
+
+# To execute this docker-compose yml file use `docker-compose pull && docker-compose -f docker-compose.yml up`
+version: "3"
+services:
+  ziglu_test:
+    image: mcopjan/blazorserver-geckocoinapi:latest
+    environment:
+      - PORT=6060
+      - x-rapidapi-key=498575e1f1mshf64bc786951dff8p151f0ejsn1847f4ae8ae9
+      - x-rapidapi-baseurl=https://coingecko.p.rapidapi.com
+      - x-rapidapi-host=coingecko.p.rapidapi.com
