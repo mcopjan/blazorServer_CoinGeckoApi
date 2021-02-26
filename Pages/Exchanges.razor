@@ -16,12 +16,12 @@ else
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Image</th>
                 <th>Name</th>
                 <th>Trade Volume 24h BTC normalized</th>
                 <th>Score</th>
                 <th>Score Rank</th>
                 <th>Url</th>
-                <th>Image</th>
                 <th>Year Established</th>
                 <th>Has trading incentive</th>
             </tr>
@@ -31,12 +31,12 @@ else
             {
             <tr>
                 <td>@exchange.id</td>
+                <td><img src=@exchange.image></td>
                 <td>@exchange.name</td>
                 <td>@exchange.trade_volume_24h_btc_normalized</td>
                 <td>@exchange.trust_score</td>
                 <td>@exchange.trust_score_rank</td>
                 <td>@exchange.url</td>
-                <td>@exchange.image</td>
                 <td>@exchange.year_established</td>
                 <td>@exchange.has_trading_incentive</td>
             </tr>
